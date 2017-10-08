@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<HTML>
+  <HEAD>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <TITLE>График работы коллцентра ЦУРУС</TITLE>
+    <HTA:APPLICATION
+        ID="oHTA"
+        APPLICATIONNAME="myApp"
+        BORDER="thin"
+        BORDERSTYLE="normal"
+        CAPTION="yes"
+        ICON=""
+        MAXIMIZEBUTTON="yes"
+        MINIMIZEBUTTON="yes"
+        SHOWINTASKBAR="no"
+        SINGLEINSTANCE="no"
+        SYSMENU="yes"
+        VERSION="1.0"
+        WINDOWSTATE="maximize" />
+  <script>
+    function load_schedule() {
+      var fso, tf;
+      fso = new ActiveXObject("Scripting.FileSystemObject");
+      tf = fso.OpenTextFile("CallCenterSchedule.html", 1);
+      document.getElementById('main').innerHTML=tf.ReadAll();
+      tf.Close();
+    }
+
+    function ChChange(id) {document.getElementById("ch").innerHTML=(/,/i.test(id))?"":id;}
+
+    function MakeAChange() {
+      var fso, tf;
+      inCSV="res.csv";
+      fso = new ActiveXObject("Scripting.FileSystemObject");
+      WshShell = new ActiveXObject("WScript.Shell");
+      WshShell.Run("python.exe CallCenterSchedule_Change.py "+document.getElementById('ch1').innerHTML+' '+document.getElementById('ch2').innerHTML, 0, true);
+      tf = fso.OpenTextFile(inCSV,1);
+      res1 = tf.ReadLine().split(',');
+      res2 = tf.ReadLine().split(',');
+      if (Number(res1[2]) && Number(res2[2])) {
+        if (res1[1].split(' ')[0]==res2[1].split(' ')[0]) {
+
+        } else {
+          if (!Number(res1[3]) && !Number(res2[3])) {
+
+          } else {
+            if (Number(res1[3])) {alert('У персонала '+res1[0]+' в день '+res1[1].split(' ')[0]+' уже установлена смена. Перенос невозможен!');}
+            if (Number(res2[3])) {alert('У персонала '+res2[0]+' в день '+res2[1].split(' ')[0]+' уже установлена смена. Перенос невозможен!');}
+          }
+        }
+      } else {
+        if (!Number(res1[2])) {alert('Для персонала '+res1[0]+' недоступна смена '+res1[1]+' в связи с недостаточной продолжительностью междусменного отдыха!');}
+        if (!Number(res2[2])) {alert('Для персонала '+res2[0]+' недоступна смена '+res2[1]+' в связи с недостаточной продолжительностью междусменного отдыха!');}
+      }
+      document.getElementById("ch1").innerHTML = "";
+      document.getElementById("ch2").innerHTML = "";
+      load_schedule();
+      tf.Close();
+      fso.DeleteFile(inCSV);
+    }
+
+  </script>
+  </HEAD>
+  <BODY scroll="yes" onLoad=load_schedule()>
+    <div class="header" id="header">
+      Выбранная смена&nbsp<span id="ch"></span>&nbsp
+      <input type="button" onclick="document.getElementById(&quot;ch1&quot;).innerHTML=document.getElementById(&quot;ch&quot;).innerHTML;document.getElementById(&quot;ch&quot;).innerHTML=&quot;&quot;;" value="Первый">
+      <input type="button" onclick="document.getElementById(&quot;ch2&quot;).innerHTML=document.getElementById(&quot;ch&quot;).innerHTML;document.getElementById(&quot;ch&quot;).innerHTML=&quot;&quot;;" value="Второй">
+      <br>Поменять&nbsp<span id="ch1" onchange="alert('Span Ch1 changed!');"></span>&nbsp<span id="ch2"></span>&nbsp<input type="Button" value="Выполнить" onclick="MakeAChange();">
+    </div>
+    <div class="main" id="main"></div>
+  </BODY>
+</HTML>

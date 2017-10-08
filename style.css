@@ -1,0 +1,48 @@
+div.header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 60px;
+	width: 100%;
+	background-color: white;
+
+	z-index: 1;
+}
+
+div.main {                
+	position: absolute;
+	top: 60px;
+	z-index: -1;
+}
+
+span {
+	text-align: center;
+        color: red;
+	width: 50px;
+	border: 1px dotted red;
+}
+
+table, th, td {
+	text-align: center;
+	border: 2px solid black;
+	border-collapse: collapse;
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+}
+
+th {
+	background-color: #FFE4B5;
+}
+
+td {
+	border: 1px solid blue;
+	background-color: #AFEEEE;
+}
+
+td.firstcol {
+	text-align: left;
+	background-color: #90EE90;
+}
