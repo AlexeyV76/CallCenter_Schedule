@@ -85,5 +85,5 @@ if b:
        (r2[0],t2)]
     per_cur.executemany(SQL_Update,p)
     conn.commit()
-    subprocess.run(['python','CallCenterSchedule_ExportHTML.py'])
+    subprocess.run(['..\\..\\python-3.6.2\\python.exe','CallCenterSchedule_ExportHTML.py'])
 conn.close()

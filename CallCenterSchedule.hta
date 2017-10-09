@@ -32,9 +32,10 @@
     function MakeAChange() {
       var fso, tf;
       inCSV="res.csv";
+      ppath="..\..\python-3.6.2\python.exe"
       fso = new ActiveXObject("Scripting.FileSystemObject");
       WshShell = new ActiveXObject("WScript.Shell");
-      WshShell.Run("python.exe CallCenterSchedule_Change.py "+document.getElementById('ch1').innerHTML+' '+document.getElementById('ch2').innerHTML, 0, true);
+      WshShell.Run(ppath+" CallCenterSchedule_Change.py "+document.getElementById('ch1').innerHTML+' '+document.getElementById('ch2').innerHTML, 0, true);
       tf = fso.OpenTextFile(inCSV,1);
       res1 = tf.ReadLine().split(',');
       res2 = tf.ReadLine().split(',');
